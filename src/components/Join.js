@@ -1,6 +1,6 @@
 import React from 'react'
 import { compose, withState, withHandlers, lifecycle } from 'recompose'
-import { currentUser, firebaseLogout } from '../utils/firebase'
+import { firebaseLogout, saveTopic, checkHaveTopic } from '../utils/firebase'
 
 import { Banner, Info, ProfileImg, UserBlock } from '../utils/styles'
 
@@ -33,7 +33,6 @@ const Join = props => {
               <p><b>วันที่ 3 สิงหาคม 2560 เวลา 13.00</b> เป็นต้นไป ณ อาคารเรียนรวม 2 ชั้น 3 มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี.</p>
             </Info>
             <div className='form-group'>
-              { console.log(props.user)}
               <div className='card'>
                 <div className='card-block' style={{ display: 'flex', justifyContent: 'center' }}>
                   <ProfileImg src={props.user.photoURL} className='rounded' style={{ height: '4.4em' }} />
@@ -60,7 +59,8 @@ const Join = props => {
                 placeholder={'...'}
                 onChange={e => props.setTopic(e.target.value)}
                 value={props.topic}
-                required
+                pattern=".{3,}"
+                required title="3 characters minimum."
               />
               <small className='form-text text-muted'>
                 * มีเวลาในการพูดทั้งหมด 30 นาที
@@ -110,18 +110,29 @@ const JoinCompose = compose(
         props.setUser(null)
       })
     },
-    submit: props => e => {
+    submit: props => async e => {
       e.preventDefault()
-      console.log(props.topic, props.detail)
+
+      let newTopic = {
+        title: props.topic,
+        detail: props.detail
+      }
+      await saveTopic(props.user, newTopic)
+      let data = await checkHaveTopic(props.user)
+      if (data !== null) {
+        props.history.push('/topic')
+      }
     }
   }),
   lifecycle({
     componentWillMount () {
-      firebase.auth().onAuthStateChanged(user => {
+      firebase.auth().onAuthStateChanged(async user => {
         if (user) {
+          let data = await checkHaveTopic(user)
+          if (data !== null) {
+            this.props.history.push('/topic')
+          }
           this.props.setUser(user)
-          console.log('willmount', user)
-          this.props.history.push('/join')
         } else {
           this.props.history.push('/')
         }

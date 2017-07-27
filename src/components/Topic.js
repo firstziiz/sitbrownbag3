@@ -1,6 +1,6 @@
 import React from 'react'
 import { compose, withState, withHandlers, lifecycle } from 'recompose'
-import { currentUser, firebaseLogout } from '../utils/firebase'
+import { firebaseLogout, checkHaveTopic } from '../utils/firebase'
 
 import { Banner, Info, ProfileImg, UserBlock } from '../utils/styles'
 
@@ -9,7 +9,8 @@ import BagBanner from '../static/BagBanner.png'
 /* global firebase */
 
 const Topic = props => {
-  if (props.user === null) {
+  console.log('topic', props.topic)
+  if (props.user === null || props.topic === null) {
     return <div />
   }
 
@@ -22,6 +23,7 @@ const Topic = props => {
           <div className='card-block'>
             <Info className='bg-faded'>
               <p><b>Brown Bag 3.0</b> เป็นงานสัมมนาเล็กๆของเด็กไอทีบางมด ซึ่งในครั้งนี้เปิดโอกาสให้กับทุกๆคนได้ เข้ามาแชร์ประสบการณ์ให้กับน้องๆ ว่าที่นักศึกษา SIT กันนะครับ..</p>
+              <p>โดยที่งาน Brown Bag ของเอกลักษณ์เล็กน้อยว่า <b><u>ผู้เข้าร่วมงานรวมถึง Speaker ทุกท่านจะต้องเตรียมขนมมาเพื่อแลกเปลี่ยนกันภายในงานคนละ 1 ชิ้น</u></b> :)</p>
               <div><b>ข้อกำหนดของงาน :</b></div>
               <ul className='list-unstyled'>
                 <li><b>1.</b> ไม่จำกัดหัวข้อ และ/หรือ เรื่องที่จะนำเสนอ</li>
@@ -38,6 +40,7 @@ const Topic = props => {
                 type='text'
                 className='form-control'
                 placeholder={'...'}
+                value={props.topic.title}
                 readOnly
               />
               <small className='form-text text-muted'>
@@ -50,6 +53,7 @@ const Topic = props => {
                 className='form-control'
                 placeholder={'...'}
                 rows={3}
+                value={props.topic.detail}
                 readOnly
               />
             </div>
@@ -61,7 +65,6 @@ const Topic = props => {
               </small>
             </p>
             <div className='form-group'>
-              { console.log(props.user)}
               <div className='card'>
                 <div className='card-block' style={{ display: 'flex', justifyContent: 'center' }}>
                   <ProfileImg src={props.user.photoURL} className='rounded' style={{ height: '4.4em' }} />
@@ -99,10 +102,15 @@ const TopicCompose = compose(
   }),
   lifecycle({
     componentWillMount () {
-      firebase.auth().onAuthStateChanged(user => {
+      firebase.auth().onAuthStateChanged(async user => {
         if (user) {
-          this.props.setUser(user)
-          console.log('willmount', user)
+          let topic = await checkHaveTopic(user)
+          if (topic === null) {
+            this.props.history.push('/join')
+          } else {
+            await this.props.setUser(user)
+            await this.props.setTopic(topic)
+          }
         } else {
           this.props.history.push('/')
         }

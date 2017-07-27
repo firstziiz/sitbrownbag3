@@ -17,10 +17,15 @@ export function currentUser () {
 }
 
 export function saveTopic (user, topic) {
-  return ref.child(`topics/${user.uid}/topic`)
+  return ref.child(`topics/${user.uid}`)
     .set({
-      topic: topic.title,
-      uid: topic.detail
+      title: topic.title,
+      detail: topic.detail
     })
-    .then(() => user)
+    .then((data) => data)
+}
+
+export function checkHaveTopic (user) {
+  return ref.child(`topics/${user.uid}`)
+    .once('value').then(snapshot => snapshot.val())
 }
