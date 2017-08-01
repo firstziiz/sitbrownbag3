@@ -19,8 +19,13 @@ export function currentUser () {
 export function saveTopic (user, topic) {
   return ref.child(`topics/${user.uid}`)
     .set({
+      user: {
+        displayName: user.displayName,
+        photo: user.photoURL
+      },
       title: topic.title,
-      detail: topic.detail
+      detail: topic.detail,
+      tel: topic.tel
     })
     .then((data) => data)
 }

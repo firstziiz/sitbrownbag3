@@ -10,6 +10,7 @@ import styled, { injectGlobal } from 'styled-components'
 import Login from './components/Login'
 import Join from './components/Join'
 import Topic from './components/Topic'
+import Topics from './components/Topics'
 
 import './static/css/font-awesome.min.css'
 
@@ -66,6 +67,7 @@ const App = props => (
               <Route exact path='/' component={Login} />
               <Route path='/join' component={Join} />
               <Route path='/topic' component={Topic} />
+              <Route path='/topics' component={Topics} />
             </Switch>
           </div>
           <div className="col-12">

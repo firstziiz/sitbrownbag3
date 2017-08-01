@@ -15,6 +15,7 @@ const Join = props => {
 
   return (
     <div>
+      { console.log(props.user) }
       <form onSubmit={e => props.submit(e)}>
         <div className='card'>
           <Banner className='card-img-top' src={BagBanner} alt='banner' />
@@ -77,6 +78,20 @@ const Join = props => {
                 required
               />
             </div>
+            <div className='form-group'>
+              <label htmlFor=''>เบอร์โทรศัพท์:</label>
+              <input
+                type='text'
+                className='form-control'
+                placeholder={'0881234567'}
+                onChange={e => props.setTel(e.target.value)}
+                value={props.tel}
+                required
+              />
+              <small className='form-text text-muted'>
+                เพื่อทำการติดต่อประสานงานในกรณีจำเป็น
+              </small>
+            </div>
             <p>
               <small className='form-text text-muted text-center'>
                 หากยืนยันแล้วไม่สามารถแก้ไขคำตอบได้อีก หากมีข้อสงสัยสอบถามใน
@@ -104,6 +119,7 @@ const JoinCompose = compose(
   withState('user', 'setUser', null),
   withState('topic', 'setTopic', ''),
   withState('detail', 'setDetail', ''),
+  withState('tel', 'setTel', ''),
   withHandlers({
     logout: props => e => {
       firebaseLogout().then((result) => {
@@ -115,7 +131,8 @@ const JoinCompose = compose(
 
       let newTopic = {
         title: props.topic,
-        detail: props.detail
+        detail: props.detail,
+        tel: props.tel
       }
       await saveTopic(props.user, newTopic)
       let data = await checkHaveTopic(props.user)

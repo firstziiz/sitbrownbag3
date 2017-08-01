@@ -57,6 +57,19 @@ const Topic = props => {
                 readOnly
               />
             </div>
+            <div className='form-group'>
+              <label htmlFor=''>เบอร์โทรศัพท์:</label>
+              <input
+                type='text'
+                className='form-control'
+                placeholder={'0881234567'}
+                value={props.topic.tel}
+                readOnly
+              />
+              <small className='form-text text-muted'>
+                เพื่อทำการติดต่อประสานงานในกรณีจำเป็น
+              </small>
+            </div>
             <p>
               <small className='form-text text-muted text-center'>
                 ขอบคุณที่ร่วมส่งต่อหัวข้อดีๆ ด้วยกัน :) หากมีข้อสงสัยสอบถามใน
