@@ -15,7 +15,14 @@ const Join = props => {
 
   return (
     <div>
-      { console.log(props.user) }
+      <button
+        role="button"
+        className="btn btn-info btn-lg btn-block"
+        onClick={() => props.history.push('/topics')}
+        style={{ marginBottom: '15px' }}
+      >
+        {'ดูหัวข้อที่ถูกเสนอมาทั้งหมด!'}
+      </button>
       <form onSubmit={e => props.submit(e)}>
         <div className='card'>
           <Banner className='card-img-top' src={BagBanner} alt='banner' />

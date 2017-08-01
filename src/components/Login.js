@@ -1,6 +1,6 @@
 import React from 'react'
 import { compose, withState, withHandlers, lifecycle } from 'recompose'
-import { firebaseAuth, currentUser, firebaseLogout } from '../utils/firebase'
+import { firebaseAuth, firebaseLogout } from '../utils/firebase'
 
 import { Banner, Card } from '../utils/styles'
 
@@ -12,12 +12,21 @@ const LoginForm = props => {
   console.log(props.loading)
   return (
     <Card active={props.loading}>
-      { console.log('user', currentUser()) }
+      <button
+        role="button"
+        className="btn btn-info btn-lg btn-block"
+        onClick={() => props.history.push('/topics')}
+        style={{ marginBottom: '15px' }}
+      >
+        {'ดูหัวข้อที่ถูกเสนอมาทั้งหมด!'}
+      </button>
       <div className='card'>
         <Banner className='card-img-top' src={BagBanner} alt='banner' />
         <div className='card-block'>
           <h4 className='card-title text-center'>SUBMIT TOPIC</h4>
-          <div className='card-text text-center'>ลงทะเบียนด้วย Facebook</div>
+          <div className='card-text text-center'>
+            {`ลงทะเบียนด้วย Facebook สำหรับผู้ที่สนใจเข้ามาร่วมแชร์ประสบการณ์ ความรู้ สิ่งที่น่าสนใจไปกับเราที่ Brown Bag #3.0 !`}
+          </div>
           <div className='form-group'>
             {
               (!firebase.auth().currentUser)

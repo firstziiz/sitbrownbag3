@@ -35,7 +35,12 @@ const Speaker = styled.div`
   }
 `
 
+/* global firebase */
+
 const Topics = props => {
+  if (props.topics.length === 0) {
+    return <div />
+  }
   const topics = Object.keys(props.topics)
     .reverse()
     .map(key => props.topics[key])
@@ -59,6 +64,14 @@ const Topics = props => {
           ))
         }
       </div>
+      <button
+        role="button"
+        className="btn btn-warning btn-lg btn-block"
+        onClick={() => props.history.push('/')}
+        style={{ marginBottom: '15px' }}
+      >
+        {'กลับสู่หน้าแรก'}
+      </button>
     </div>
   )
 }

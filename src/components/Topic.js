@@ -18,6 +18,16 @@ const Topic = props => {
   return (
     <div>
       <form>
+        <div>
+          <button
+            role="button"
+            className="btn btn-info btn-lg btn-block"
+            onClick={() => props.history.push('/topics')}
+            style={{ marginBottom: '15px' }}
+          >
+            {'ดูหัวข้อที่ถูกเสนอมาทั้งหมด!'}
+          </button>
+        </div>
         <div className='card'>
           <Banner className='card-img-top' src={BagBanner} alt='banner' />
           <div className='card-block'>
